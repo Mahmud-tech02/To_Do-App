@@ -1,0 +1,25 @@
+{
+    "name": "AI Guardian - Progress Tracker",
+    "short_name": "AI Guardian",
+    "description": "আপনার ডিজিটাল অভিভাবক - লক্ষ্য ভিত্তিক প্রোগ্রেস ট্র্যাকার",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#1a1a2e",
+    "theme_color": "#0ea5e9",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "https://cdn-icons-png.flaticon.com/512/4712/4712035.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "https://cdn-icons-png.flaticon.com/512/4712/4712035.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "categories": ["productivity", "education", "personalization"],
+    "lang": "bn-BD",
+    "dir": "ltr"
+}

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Guardian - Target-Based Progress Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="glass-header">
+            <div class="header-left">
+                <h1><i class="fas fa-robot"></i> AI Guardian</h1>
+                <p class="tagline">আপনার ডিজিটাল অভিভাবক</p>
+            </div>
+            <div class="header-right">
+                <div class="current-time" id="currentTime">লোড হচ্ছে...</div>
+                <div class="streak-counter">
+                    <i class="fas fa-fire"></i> 
+                    <span id="streakCount">০</span> দিন স্ট্রিক
+                </div>
+                <button class="btn-notification" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="glass-nav">
+            <button class="nav-btn active" data-target="home">
+                <i class="fas fa-home"></i> হোম
+            </button>
+            <button class="nav-btn" data-target="targets">
+                <i class="fas fa-bullseye"></i> টার্গেট
+            </button>
+            <button class="nav-btn" data-target="progress">
+                <i class="fas fa-chart-line"></i> অগ্রগতি
+            </button>
+            <button class="nav-btn" data-target="ai-guardian">
+                <i class="fas fa-robot"></i> AI অভিভাবক
+            </button>
+            <button class="nav-btn" data-target="profile">
+                <i class="fas fa-user"></i> প্রোফাইল
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Home Screen -->
+            <section id="home" class="screen active">
+                <div class="dashboard-grid">
+                    <!-- Today's Progress Ring -->
+                    <div class="glass-card progress-ring-card">
+                        <h2><i class="fas fa-calendar-day"></i> আজকের অগ্রগতি</h2>
+                        <div class="progress-container">
+                            <div class="circular-progress">
+                                <svg width="200" height="200">
+                                    <circle class="progress-bg" cx="100" cy="100" r="90"></circle>
+                                    <circle class="progress-fill" cx="100" cy="100" r="90"></circle>
+                                </svg>
+                                <div class="progress-text">
+                                    <span id="progressPercent">০%</span>
+                                    <span id="todayTime">০ ঘণ্টা</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Blender:</span>
+                                <span class="detail-value" id="blenderTime">০ ঘণ্টা</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Programming:</span>
+                                <span class="detail-value" id="programmingTime">০ ঘণ্টা</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">ফোকাস স্কোর:</span>
+                                <span class="detail-value" id="focusScore">০</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- To-Do List -->
+                    <div class="glass-card todo-card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-tasks"></i> আজকের কাজ</h2>
+                            <button class="btn-add" id="addTodoBtn">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="todo-list" id="todoList">
+                            <!-- Dynamic todo items will be added here -->
+                        </div>
+                        <div class="quick-add-form" id="quickAddForm" style="display: none;">
+                            <input type="text" id="newTodoInput" placeholder="নতুন কাজ যোগ করুন...">
+                            <div class="form-actions">
+                                <button class="btn-cancel" id="cancelTodoBtn">বাতিল</button>
+                                <button class="btn-save" id="saveTodoBtn">যোগ করুন</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Timer -->
+                    <div class="glass-card timer-card">
+                        <h2><i class="fas fa-clock"></i> লাইভ টাইমার</h2>
+                        <div class="timer-display" id="timerDisplay">
+                            ০০:০০:০০
+                        </div>
+                        <div class="timer-controls">
+                            <button class="btn-timer" id="startTimerBtn">
+                                <i class="fas fa-play"></i> শুরু করুন
+                            </button>
+                            <button class="btn-timer" id="pauseTimerBtn">
+                                <i class="fas fa-pause"></i> বিরতি
+                            </button>
+                            <button class="btn-timer" id="stopTimerBtn">
+                                <i class="fas fa-stop"></i> শেষ
+                            </button>
+                        </div>
+                        <div class="activity-selector">
+                            <select id="activitySelect">
+                                <option value="blender">Blender Animation</option>
+                                <option value="programming">Programming</option>
+                                <option value="research">Research/Learning</option>
+                                <option value="other">অন্যান্য</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Today's Log -->
+                    <div class="glass-card log-card">
+                        <h2><i class="fas fa-clipboard-list"></i> আজকের লগ</h2>
+                        <div class="log-form">
+                            <textarea id="todayLog" placeholder="আজকে কি করলাম..."></textarea>
+                            <textarea id="tomorrowPlan" placeholder="আগামীকাল কি করতে চাই..."></textarea>
+                            <button class="btn-log" id="saveLogBtn">লগ সংরক্ষণ করুন</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Targets Screen -->
+            <section id="targets" class="screen">
+                <div class="targets-container">
+                    <div class="glass-card grand-target-card">
+                        <h2><i class="fas fa-trophy"></i> গ্র্যান্ড টার্গেট</h2>
+                        <div class="target-content">
+                            <div class="target-item">
+                                <h3>🎬 Blender Animation মাস্টারি</h3>
+                                <p class="target-desc">3D Animation, Modeling, Rigging, VFX শেখা এবং ইন্ডাস্ট্রি লেভেল প্রজেক্ট তৈরি</p>
+                                <div class="target-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 30%"></div>
+                                    </div>
+                                    <span class="progress-text">৩০% সম্পূর্ণ</span>
+                                </div>
+                            </div>
+                            <div class="target-item">
+                                <h3>💻 Programming Industry</h3>
+                                <p class="target-desc">Web Development, AI/ML, Software Development এ দক্ষতা অর্জন</p>
+                                <div class="target-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 25%"></div>
+                                    </div>
+                                    <span class="progress-text">২৫% সম্পূর্ণ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card subgoals-card">
+                        <h2><i class="fas fa-list-check"></i> সাব-গোলস</h2>
+                        <div class="subgoals-list" id="subgoalsList">
+                            <!-- Subgoals will be added dynamically -->
+                        </div>
+                        <button class="btn-add-subgoal" id="addSubgoalBtn">
+                            <i class="fas fa-plus"></i> নতুন সাব-গোল যোগ করুন
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Progress Screen -->
+            <section id="progress" class="screen">
+                <div class="progress-screen">
+                    <div class="glass-card chart-card">
+                        <h2><i class="fas fa-chart-bar"></i> সাপ্তাহিক অ্যানালাইসিস</h2>
+                        <div class="chart-container">
+                            <canvas id="weeklyChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-card distribution-card">
+                        <h2><i class="fas fa-chart-pie"></i> সময় বণ্টন</h2>
+                        <div class="chart-container">
+                            <canvas id="distributionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-card report-card">
+                        <h2><i class="fas fa-file-alt"></i> মাসিক রিপোর্ট</h2>
+                        <div class="monthly-report" id="monthlyReport">
+                            <!-- Monthly report content -->
+                        </div>
+                        <button class="btn-download" id="downloadReportBtn">
+                            <i class="fas fa-download"></i> রিপোর্ট ডাউনলোড করুন (JSON)
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Guardian Screen -->
+            <section id="ai-guardian" class="screen">
+                <div class="ai-guardian-container">
+                    <div class="glass-card ai-status-card">
+                        <div class="ai-header">
+                            <div class="ai-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="ai-info">
+                                <h2>আপনার AI অভিভাবক</h2>
+                                <p class="ai-status active">সক্রিয় • আপনাকে পর্যবেক্ষণ করছে</p>
+                            </div>
+                        </div>
+                        <div class="ai-controls">
+                            <button class="btn-ai-control active" id="toggleMonitoringBtn">
+                                <i class="fas fa-eye"></i> পর্যবেক্ষণ সক্রিয়
+                            </button>
+                            <button class="btn-ai-control" id="permissionBtn">
+                                <i class="fas fa-shield-alt"></i> পারমিশন দিন
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="glass-card activity-tracker-card">
+                        <h2><i class="fas fa-desktop"></i> বর্তমান অ্যাক্টিভিটি ট্র্যাকিং</h2>
+                        <div class="tracking-info">
+                            <div class="tracking-item">
+                                <span class="tracking-label">বর্তমান অ্যাক্টিভিটি:</span>
+                                <span class="tracking-value" id="currentActivity">ট্র্যাকিং শুরু হচ্ছে...</span>
+                            </div>
+                            <div class="tracking-item">
+                                <span class="tracking-label">সময় ব্যয়:</span>
+                                <span class="tracking-value" id="activityDuration">০ মিনিট</span>
+                            </div>
+                            <div class="tracking-item">
+                                <span class="tracking-label">উৎপাদনশীলতা স্কোর:</span>
+                                <span class="tracking-value" id="productivityScore">০%</span>
+                            </div>
+                            <div class="tracking-item">
+                                <span class="tracking-label">অপচয় সনাক্তকরণ:</span>
+                                <span class="tracking-value" id="wasteDetection">নিষ্ক্রিয়</span>
+                            </div>
+                        </div>
+                        <div class="website-tracking">
+                            <h3><i class="fas fa-globe"></i> ওয়েবসাইট ব্যবহার ট্র্যাকিং</h3>
+                            <div class="website-list" id="websiteList">
+                                <!-- Website tracking data will appear here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card ai-analysis-card">
+                        <h2><i class="fas fa-brain"></i> AI বিশ্লেষণ ও পরামর্শ</h2>
+                        <div class="ai-analysis" id="aiAnalysis">
+                            <div class="analysis-placeholder">
+                                <p>AI অভিভাবক আপনার অ্যাক্টিভিটি বিশ্লেষণ করে পরামর্শ প্রদান করবে...</p>
+                            </div>
+                        </div>
+                        <div class="ai-recommendations" id="aiRecommendations">
+                            <!-- AI recommendations will appear here -->
+                        </div>
+                    </div>
+
+                    <div class="glass-card reality-check-card">
+                        <h2><i class="fas fa-exclamation-triangle"></i> বাস্তবতা চেক</h2>
+                        <div class="reality-content" id="realityCheck">
+                            <!-- Reality check content -->
+                        </div>
+                        <button class="btn-reality" id="generateRealityBtn">
+                            <i class="fas fa-calculator"></i> আজকের বাস্তবতা চেক করুন
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Screen -->
+            <section id="profile" class="screen">
+                <div class="profile-container">
+                    <div class="glass-card profile-stats-card">
+                        <h2><i class="fas fa-user-circle"></i> আপনার স্ট্যাটিসটিক্স</h2>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>মোট শেখার সময়</h3>
+                                    <p class="stat-value" id="totalLearningHours">০ ঘণ্টা</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-flag-checkered"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>সম্পূর্ণ মাইলফলক</h3>
+                                    <p class="stat-value" id="completedMilestones">০</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>বর্তমান স্ট্রিক</h3>
+                                    <p class="stat-value" id="currentStreak">০ দিন</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>ফোকাস গড়</h3>
+                                    <p class="stat-value" id="avgFocusScore">০%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card roadmap-card">
+                        <h2><i class="fas fa-road"></i> লার্নিং রোডম্যাপ</h2>
+                        <div class="roadmap-editor" id="roadmapEditor">
+                            <!-- Roadmap editor content -->
+                        </div>
+                        <button class="btn-roadmap" id="editRoadmapBtn">
+                            <i class="fas fa-edit"></i> রোডম্যাপ এডিট করুন
+                        </button>
+                    </div>
+
+                    <div class="glass-card achievements-card">
+                        <h2><i class="fas fa-award"></i> অর্জনসমূহ</h2>
+                        <div class="achievements-list" id="achievementsList">
+                            <!-- Achievements will appear here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Notification Panel -->
+        <div class="notification-panel" id="notificationPanel">
+            <div class="notification-header">
+                <h3><i class="fas fa-bell"></i> বিজ্ঞপ্তি</h3>
+                <button class="btn-close" id="closeNotificationBtn">&times;</button>
+            </div>
+            <div class="notification-list" id="notificationList">
+                <!-- Notifications will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Sound for alerts -->
+    <audio id="alertSound" src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3"></audio>
+    <audio id="breakSound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3"></audio>
+    <audio id="distractionSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
+
+    <!-- AI System Scripts -->
+<script src="ai-system.js"></script>
+<script>
+    // Initialize AI System when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check if AI System should be enabled
+        const enableAI = localStorage.getItem('enable_ai_system') !== 'false';
+        
+        if (enableAI) {
+            window.aiSystem = new AISystem({
+                serverUrl: 'http://localhost:3001', // Change to your server URL
+                wsUrl: 'ws://localhost:3001',       // Change to your WebSocket URL
+                enableRealtime: true,
+                enableScreenAnalysis: confirm('Enable screen analysis for better AI insights?'),
+                userId: localStorage.getItem('ai_user_id')
+            });
+        }
+    });
+</script>
+    <script src="script.js"></script>
+    <script src="pwa.js"></script>
+</body>
+</html>
